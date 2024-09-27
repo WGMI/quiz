@@ -1,0 +1,4 @@
+1. Open the index.html file. Clicking it should take you to a browser like Chrome.
+2. Put the browser in phone mode (usually F12 and then clicking the responsive option).
+3. Remove the top bar (F11).
+4. Enjoy!
