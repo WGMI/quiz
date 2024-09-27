@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <img src="images/brain.png" alt="Logo" class="quiz-logo">
+        <div class="question">
+            <span id="question-text">Question will appear here</span>
+        </div>
+
+        <div class="options" id="options-container">
+            <!-- Options will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "When was Ecobank founded?",
+                options: ["1985", "1990", "2000", "2010"],
+                correctAnswer: "1985"
+            },
+            {
+                question: "In which country is Ecobank located?",
+                options: ["Lagos, Nigeria", "Lome, Togo", "Accra, Ghana", "Nairobi, Kenya"],
+                correctAnswer: "Lome, Togo"
+            },
+            {
+                question: "What is the official name of Ecobank?",
+                options: [
+                    "Ecobank International",
+                    "Ecobank Transnational Incorporated",
+                    "Ecobank Financial Group",
+                    "Ecobank Global"
+                ],
+                correctAnswer: "Ecobank Transnational Incorporated"
+            },
+            {
+                question: "Ecobank primarily operates in how many countries?",
+                options: ["20", "33", "40", "50"],
+                correctAnswer: "33"
+            },
+            {
+                question: "Which edition of the Ecobank Fintech Challenge are we hosting today?",
+                options: ["7th"],
+                correctAnswer: "7th"
+            },
+            {
+                question: "What is the name of the digital Ecobank account?",
+                options: ["Xpress Account", "Speed Account", "Easy Account", "Ecobank Digital Account"],
+                correctAnswer: "Xpress Account"
+            },
+            {
+                question: "What does Ecobank Rapistransfer let you do?",
+                options: ["Send money across borders instantly"],
+                correctAnswer: "Send money across borders instantly"
+            },
+            {
+                question: "What is the color of the Ecobank Mobile App?",
+                options: ["Blue and white"],
+                correctAnswer: "Blue and white"
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let correctAnswers = 0;
+
+        // Function to load the current question
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            const questionText = document.getElementById("question-text");
+            const optionsContainer = document.getElementById("options-container");
+
+            // Update question text
+            questionText.textContent = currentQuestion.question;
+
+            // Clear previous options
+            optionsContainer.innerHTML = "";
+
+            // Generate and append new options
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.classList.add("option-button");
+                button.innerHTML = `<span>${option}</span>`;
+                button.onclick = () => selectOption(button, option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        // Function to handle option selection
+        function selectOption(button, selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+
+            if (selectedOption === currentQuestion.correctAnswer) {
+                button.style.backgroundColor = "green"; // Correct answer
+                correctAnswers++; // Increment correct answers count
+            } else {
+                button.style.backgroundColor = "red"; // Wrong answer
+            }
+
+            // Disable all options after one is selected
+            const allOptions = document.querySelectorAll(".option-button");
+            allOptions.forEach(option => {
+                option.disabled = true;
+                if (option.textContent.trim() === currentQuestion.correctAnswer) {
+                    option.style.backgroundColor = "green"; // Show correct answer if not selected
+                }
+            });
+
+            // Wait 1.5 seconds, then move to the next question or end the quiz
+            setTimeout(nextQuestion, 1500);
+        }
+
+        // Function to go to the next question
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                loadQuestion();
+            } else {
+                // End of quiz
+                checkResults();
+            }
+        }
+
+        // Function to check results and redirect to win or lose page
+        function checkResults() {
+            const totalQuestions = quizData.length;
+            const half = Math.floor(totalQuestions / 2);
+
+            if (correctAnswers >= half) {
+                window.location.href = "win.html"; // Redirect to win page
+            } else {
+                window.location.href = "lose.html"; // Redirect to lose page
+            }
+        }
+
+        // Load the first question
+        loadQuestion();
+    </script>
+</body>
+
+</html>
